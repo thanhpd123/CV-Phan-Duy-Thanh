@@ -1,33 +1,40 @@
-// filepath: api/contact.js
 const nodemailer = require('nodemailer');
 
 export default async function (req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).send({ message: 'Only POST requests allowed' });
+        return res.status(405).json({ message: 'Only POST requests allowed' });
     }
 
     const { name, email, subject, message } = req.body;
 
-    // Configure your email transport
+    // Format email content tương tự như PHP version
+    const emailContent = `
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+Message: ${message}
+    `.trim();
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'your-email@gmail.com',
-            pass: 'your-email-password',
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_APP_PASSWORD
         },
     });
 
     const mailOptions = {
-        from: email,
+        from: process.env.EMAIL_USER,
         to: 'thanhpd2303@gmail.com',
         subject: subject,
-        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+        text: emailContent,
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        res.status(200).send('OK');
+        res.status(200).json({ message: 'OK' });
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: 'Failed to send email' });
     }
 }
