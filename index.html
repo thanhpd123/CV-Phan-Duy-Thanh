@@ -95,7 +95,13 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section light-background">
 
-      <img src="assets/img/hero-bg.jpg" alt="">
+      <!-- Sử dụng thẻ picture để tự động đổi ảnh theo thiết bị -->
+      <picture>
+        <!-- Ảnh dọc dành riêng cho mobile (màn hình < 768px) -->
+        <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.jpg">
+        <!-- Ảnh ngang mặc định cho máy tính -->
+        <img src="assets/img/hero-bg.jpg" alt="Phan Duy Thanh Hero">
+      </picture>
 
       <div class="container" data-aos="zoom-out">
         <div class="row justify-content-center">
